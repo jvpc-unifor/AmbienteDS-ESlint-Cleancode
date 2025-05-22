@@ -1,0 +1,26 @@
+{
+  "name": "ambienteds-eslint-cleancode",
+  "version": "1.0.0",
+  "description": "Trabalho de Ambiente de Desenvolvimento de Software. Corrigir um código seguindo as normas padronizadas.",
+  "main": "eslint.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "corretor": "eslint .",
+    "corretor:fix": "eslint . --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jvpc-unifor/AmbienteDS-ESlint-Cleancode.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jvpc-unifor/AmbienteDS-ESlint-Cleancode/issues"
+  },
+  "homepage": "https://github.com/jvpc-unifor/AmbienteDS-ESlint-Cleancode#readme",
+  "devDependencies": {
+    "eslint": "^9.27.0",
+    "globals": "^16.1.0"
+  }
+}
