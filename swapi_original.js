@@ -4,6 +4,7 @@
 const http = require("http");
 const https = require("https");
 
+// #Minhas constantes e configurações!
 const cache = {};
 let debug_mode = true;
 let timeout = 5000;

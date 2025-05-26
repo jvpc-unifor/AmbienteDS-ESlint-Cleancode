@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR"> <head>
+        <meta charset="UTF-8"> <title>Star Wars API Demo</title>
+        <style>
+            body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+            h1 { color: #FFE81F; background-color: #000; padding: 10px; }
+            button { background-color: #FFE81F; border: none; padding: 10px 20px; cursor: pointer; }
+            .footer { margin-top: 50px; font-size: 12px; color: #666; }
+            pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+        </style>
+    </head>
+    <body>
+        <h1>Star Wars API Demo</h1>
+        <p>This page demonstrates fetching data from the Star Wars API.</p>
+        <p>Check your console for the API results.</p>
+        <button onclick="fetchData()">Fetch Star Wars Data</button>
+        <div id="results"></div>
+        
+        <div class="footer">
+            <p>
+                API calls: <span id="stats-api-calls">-</span> | 
+                Cache entries: <span id="stats-cache-entries">-</span> | 
+                Errors: <span id="stats-errors">-</span>
+            </p>
+            <pre>Debug mode: <span id="stats-debug-mode">-</span> | Timeout: <span id="stats-timeout">-</span> ms</pre>
+        </div>
+
+        <script>
+            function fetchData() {
+                document.getElementById('results').innerHTML = '<p>Loading data...</p>';
+                fetch('/api')
+                    .then(res => {
+                        if (!res.ok) throw new Error('Falha na resposta da API: ' + res.status);
+                        return res.text();
+                    })
+                    .then(text => {
+                        alert('API request made! Check server console.');
+                        document.getElementById('results').innerHTML = '<p>Data fetched! Check server console.</p>';
+                        atualizarEstatisticasNoRodape(); 
+                    })
+                    .catch(err => {
+                        document.getElementById('results').innerHTML = '<p>Error: ' + err.message + '</p>';
+                        atualizarEstatisticasNoRodape();
+                    });
+            }
+
+            function atualizarEstatisticasNoRodape() {
+                fetch('/stats')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Falha ao buscar estatísticas: ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(stats => {
+                        document.getElementById('stats-api-calls').textContent = stats.chamadasApi !== undefined ? stats.chamadasApi : '-';
+                        document.getElementById('stats-cache-entries').textContent = stats.tamanhoCache !== undefined ? stats.tamanhoCache : '-';
+                        document.getElementById('stats-errors').textContent = stats.erros !== undefined ? stats.erros : '-';
+                        document.getElementById('stats-debug-mode').textContent = stats.modoDepuracao !== undefined ? (stats.modoDepuracao ? "ATIVADO" : "DESATIVADO") : '-';
+                        document.getElementById('stats-timeout').textContent = stats.tempoLimiteRequisicaoMs !== undefined ? stats.tempoLimiteRequisicaoMs : '-';
+                    })
+                    .catch(error => {
+                        console.error('Erro ao atualizar estatísticas no rodapé:', error);
+                        const footerSpans = document.querySelectorAll('.footer span');
+                        footerSpans.forEach(span => span.textContent = 'Erro ao carregar');
+                    });
+            }
+
+            document.addEventListener('DOMContentLoaded', atualizarEstatisticasNoRodape);
+        </script>
+    </body>
+</html>
